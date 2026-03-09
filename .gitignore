@@ -1,0 +1,23 @@
+# Elm build artifacts
+elm-stuff/
+public/app.js
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor / IDE
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.iml
+
+# Node (falls mal npm ins Spiel kommt)
+node_modules/
+
+# Misc
+*.log
+.env

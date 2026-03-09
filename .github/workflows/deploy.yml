@@ -1,0 +1,46 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Elm
+        run: |
+          curl -L -o /tmp/elm.gz https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz
+          gunzip -f /tmp/elm.gz
+          chmod +x /tmp/elm
+          sudo mv /tmp/elm /usr/local/bin/
+
+      - name: Build Elm
+        run: |
+          chmod +x build.sh
+          ./build.sh
+
+
+      - name: Generate version.json
+        run: |
+          HASH=$(git rev-parse HEAD)
+          DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          echo "{\"hash\":\"${HASH}\",\"date\":\"${DATE}\"}" > public/version.json
+
+      - name: Copy LICENSE
+        run: cp LICENSE public/ 2>/dev/null || true
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
