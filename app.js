@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.ac.E === region.ak.E)
+	if (region.ab.F === region.am.F)
 	{
-		return 'on line ' + region.ac.E;
+		return 'on line ' + region.ab.F;
 	}
-	return 'on lines ' + region.ac.E + ' through ' + region.ak.E;
+	return 'on lines ' + region.ab.F + ' through ' + region.am.F;
 }
 
 
@@ -2720,8 +2720,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		p: func(record.p),
-		ad: record.ad,
-		aa: record.aa
+		ac: record.ac,
+		_: record._
 	}
 });
 
@@ -2990,10 +2990,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.p;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.ad;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.ac;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.aa) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value._) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3983,7 +3983,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 		impl.bm,
 		impl.bj,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.ab && impl.ab(sendToApp)
+			var divertHrefToApp = impl.aa && impl.aa(sendToApp)
 			var view = impl.bn;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
@@ -4058,7 +4058,7 @@ function _Browser_application(impl)
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		ab: function(sendToApp)
+		aa: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4074,9 +4074,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.aI === next.aI
-							&& curr.aq === next.aq
-							&& curr.aF.a === next.aF.a
+							&& curr.aG === next.aG
+							&& curr.ar === next.ar
+							&& curr.aC.a === next.aC.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4247,12 +4247,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		aO: _Browser_getScene(),
+		aN: _Browser_getScene(),
 		aU: {
 			aW: _Browser_window.pageXOffset,
 			aX: _Browser_window.pageYOffset,
 			aV: _Browser_doc.documentElement.clientWidth,
-			ap: _Browser_doc.documentElement.clientHeight
+			aq: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4263,7 +4263,7 @@ function _Browser_getScene()
 	var elem = _Browser_doc.documentElement;
 	return {
 		aV: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		ap: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		aq: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4286,15 +4286,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			aO: {
+			aN: {
 				aV: node.scrollWidth,
-				ap: node.scrollHeight
+				aq: node.scrollHeight
 			},
 			aU: {
 				aW: node.scrollLeft,
 				aX: node.scrollTop,
 				aV: node.clientWidth,
-				ap: node.clientHeight
+				aq: node.clientHeight
 			}
 		};
 	});
@@ -4324,18 +4324,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			aO: _Browser_getScene(),
+			aN: _Browser_getScene(),
 			aU: {
 				aW: x,
 				aX: y,
 				aV: _Browser_doc.documentElement.clientWidth,
-				ap: _Browser_doc.documentElement.clientHeight
+				aq: _Browser_doc.documentElement.clientHeight
 			},
 			a2: {
 				aW: x + rect.left,
 				aX: y + rect.top,
 				aV: rect.width,
-				ap: rect.height
+				aq: rect.height
 			}
 		};
 	});
@@ -4779,22 +4779,22 @@ var $elm$core$Array$builderToArray = F2(
 		if (!builder.a) {
 			return A4(
 				$elm$core$Array$Array_elm_builtin,
-				$elm$core$Elm$JsArray$length(builder.c),
+				$elm$core$Elm$JsArray$length(builder.b),
 				$elm$core$Array$shiftStep,
 				$elm$core$Elm$JsArray$empty,
-				builder.c);
+				builder.b);
 		} else {
 			var treeLen = builder.a * $elm$core$Array$branchFactor;
 			var depth = $elm$core$Basics$floor(
 				A2($elm$core$Basics$logBase, $elm$core$Array$branchFactor, treeLen - 1));
-			var correctNodeList = reverseNodeList ? $elm$core$List$reverse(builder.d) : builder.d;
+			var correctNodeList = reverseNodeList ? $elm$core$List$reverse(builder.c) : builder.c;
 			var tree = A2($elm$core$Array$treeFromBuilder, correctNodeList, builder.a);
 			return A4(
 				$elm$core$Array$Array_elm_builtin,
-				$elm$core$Elm$JsArray$length(builder.c) + treeLen,
+				$elm$core$Elm$JsArray$length(builder.b) + treeLen,
 				A2($elm$core$Basics$max, 5, depth * $elm$core$Array$shiftStep),
 				tree,
-				builder.c);
+				builder.b);
 		}
 	});
 var $elm$core$Basics$idiv = _Basics_idiv;
@@ -4807,7 +4807,7 @@ var $elm$core$Array$initializeHelp = F5(
 				return A2(
 					$elm$core$Array$builderToArray,
 					false,
-					{d: nodeList, a: (len / $elm$core$Array$branchFactor) | 0, c: tail});
+					{c: nodeList, a: (len / $elm$core$Array$branchFactor) | 0, b: tail});
 			} else {
 				var leaf = $elm$core$Array$Leaf(
 					A3($elm$core$Elm$JsArray$initialize, $elm$core$Array$branchFactor, fromIndex, fn));
@@ -4874,7 +4874,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {am: fragment, aq: host, aC: path, aF: port_, aI: protocol, aJ: query};
+		return {ao: fragment, ar: host, aA: path, aC: port_, aG: protocol, aH: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5177,7 +5177,7 @@ var $author$project$Main$init = function (flags) {
 		}
 	}();
 	return _Utils_Tuple2(
-		{C: false, u: '', F: $elm$core$Maybe$Nothing, M: 0, j: $author$project$Main$Loading, N: versionHash},
+		{D: false, v: '', G: $elm$core$Maybe$Nothing, M: 0, i: $author$project$Main$Loading, N: versionHash},
 		$author$project$Main$initMap(0));
 };
 var $author$project$Main$DataError = function (a) {
@@ -5222,17 +5222,9 @@ var $author$project$Main$Station = function (id) {
 					return function (addr) {
 						return function (geo) {
 							return function (locationName) {
-								return function (parkingInfo) {
+								return function (access) {
 									return function (charging) {
-										return function (payment) {
-											return function (openingHours) {
-												return function (openingWeekdays) {
-													return function (openingDaytime) {
-														return {s: addr, y: charging, K: deviceType, O: displayName, a4: geo, R: id, L: locationName, ay: openingDaytime, az: openingHours, aA: openingWeekdays, V: operator, W: parkingInfo, X: payment, j: status};
-													};
-												};
-											};
-										};
+										return {z: access, n: addr, s: charging, t: deviceType, O: displayName, a4: geo, R: id, L: locationName, U: operator, i: status};
 									};
 								};
 							};
@@ -5243,11 +5235,12 @@ var $author$project$Main$Station = function (id) {
 		};
 	};
 };
-var $author$project$Main$Address = F6(
-	function (strasse, hausnummer, plz, ort, bundesland, kreis) {
-		return {ag: bundesland, an: hausnummer, at: kreis, aB: ort, aE: plz, aQ: strasse};
+var $author$project$Main$Access = F3(
+	function (parking, payment, openingHours) {
+		return {az: openingHours, V: parking, W: payment};
 	});
-var $elm$json$Json$Decode$map6 = _Json_map6;
+var $elm$json$Json$Decode$list = _Json_decodeList;
+var $elm$json$Json$Decode$map3 = _Json_map3;
 var $elm$json$Json$Decode$oneOf = _Json_oneOf;
 var $author$project$Main$optStr = function (field) {
 	return $elm$json$Json$Decode$oneOf(
@@ -5257,27 +5250,84 @@ var $author$project$Main$optStr = function (field) {
 				$elm$json$Json$Decode$succeed('')
 			]));
 };
-var $author$project$Main$addressDecoder = A7(
-	$elm$json$Json$Decode$map6,
-	$author$project$Main$Address,
-	$author$project$Main$optStr('Straße'),
-	$author$project$Main$optStr('Hausnummer'),
-	$author$project$Main$optStr('Postleitzahl'),
-	$author$project$Main$optStr('Ort'),
-	$author$project$Main$optStr('Bundesland'),
-	$author$project$Main$optStr('Kreis/kreisfreie Stadt'));
-var $author$project$Main$Charging = F3(
-	function (inbetriebnahme, nennleistung, points) {
-		return {ar: inbetriebnahme, T: nennleistung, Z: points};
+var $author$project$Main$accessDecoder = A4(
+	$elm$json$Json$Decode$map3,
+	$author$project$Main$Access,
+	$author$project$Main$optStr('parking'),
+	$elm$json$Json$Decode$oneOf(
+		_List_fromArray(
+			[
+				A2(
+				$elm$json$Json$Decode$field,
+				'payment',
+				$elm$json$Json$Decode$list($elm$json$Json$Decode$string)),
+				$elm$json$Json$Decode$succeed(_List_Nil)
+			])),
+	$author$project$Main$optStr('opening_hours'));
+var $author$project$Main$Address = F7(
+	function (street, houseNumber, addressExtra, postcode, city, state, district) {
+		return {af: addressExtra, ah: city, al: district, as: houseNumber, aD: postcode, aP: state, aQ: street};
 	});
-var $author$project$Main$ChargingPoint = F4(
-	function (plugs, power, evseId, pkey) {
-		return {P: evseId, bd: pkey, Y: plugs, _: power};
+var $author$project$Main$dp = F3(
+	function (field, decoder, default_) {
+		return A2(
+			$elm$json$Json$Decode$map2,
+			$elm$core$Basics$apR,
+			$elm$json$Json$Decode$oneOf(
+				_List_fromArray(
+					[
+						A2($elm$json$Json$Decode$field, field, decoder),
+						$elm$json$Json$Decode$succeed(default_)
+					])));
 	});
-var $elm$json$Json$Decode$list = _Json_decodeList;
-var $elm$json$Json$Decode$map4 = _Json_map4;
-var $author$project$Main$chargingPointDecoder = A5(
-	$elm$json$Json$Decode$map4,
+var $author$project$Main$addressDecoder = A4(
+	$author$project$Main$dp,
+	'district',
+	$elm$json$Json$Decode$string,
+	'',
+	A4(
+		$author$project$Main$dp,
+		'state',
+		$elm$json$Json$Decode$string,
+		'',
+		A4(
+			$author$project$Main$dp,
+			'city',
+			$elm$json$Json$Decode$string,
+			'',
+			A4(
+				$author$project$Main$dp,
+				'postcode',
+				$elm$json$Json$Decode$string,
+				'',
+				A4(
+					$author$project$Main$dp,
+					'address_extra',
+					$elm$json$Json$Decode$string,
+					'',
+					A4(
+						$author$project$Main$dp,
+						'house_number',
+						$elm$json$Json$Decode$string,
+						'',
+						A4(
+							$author$project$Main$dp,
+							'street',
+							$elm$json$Json$Decode$string,
+							'',
+							$elm$json$Json$Decode$succeed($author$project$Main$Address))))))));
+var $author$project$Main$Charging = F4(
+	function (ratedPowerKw, commissioningDate, deviceType, points) {
+		return {ai: commissioningDate, t: deviceType, Y: points, aI: ratedPowerKw};
+	});
+var $author$project$Main$ChargingPoint = F5(
+	function (plugs, power, kW, evseId, pkey) {
+		return {P: evseId, at: kW, bd: pkey, X: plugs, Z: power};
+	});
+var $elm$json$Json$Decode$float = _Json_decodeFloat;
+var $elm$json$Json$Decode$map5 = _Json_map5;
+var $author$project$Main$chargingPointDecoder = A6(
+	$elm$json$Json$Decode$map5,
 	$author$project$Main$ChargingPoint,
 	$elm$json$Json$Decode$oneOf(
 		_List_fromArray(
@@ -5302,17 +5352,35 @@ var $author$project$Main$chargingPointDecoder = A5(
 			[
 				A2(
 				$elm$json$Json$Decode$field,
+				'kW',
+				A2($elm$json$Json$Decode$map, $elm$core$Maybe$Just, $elm$json$Json$Decode$float)),
+				$elm$json$Json$Decode$succeed($elm$core$Maybe$Nothing)
+			])),
+	$elm$json$Json$Decode$oneOf(
+		_List_fromArray(
+			[
+				A2(
+				$elm$json$Json$Decode$field,
 				'evse_id',
 				$elm$json$Json$Decode$list($elm$json$Json$Decode$string)),
 				$elm$json$Json$Decode$succeed(_List_Nil)
 			])),
 	$author$project$Main$optStr('pkey'));
-var $elm$json$Json$Decode$map3 = _Json_map3;
-var $author$project$Main$chargingDecoder = A4(
-	$elm$json$Json$Decode$map3,
+var $elm$json$Json$Decode$map4 = _Json_map4;
+var $author$project$Main$chargingDecoder = A5(
+	$elm$json$Json$Decode$map4,
 	$author$project$Main$Charging,
-	$author$project$Main$optStr('Inbetriebnahmedatum'),
-	$author$project$Main$optStr('Nennleistung Ladeeinrichtung [kW]'),
+	$elm$json$Json$Decode$oneOf(
+		_List_fromArray(
+			[
+				A2(
+				$elm$json$Json$Decode$field,
+				'rated_power_kw',
+				A2($elm$json$Json$Decode$map, $elm$core$Maybe$Just, $elm$json$Json$Decode$float)),
+				$elm$json$Json$Decode$succeed($elm$core$Maybe$Nothing)
+			])),
+	$author$project$Main$optStr('commissioning_date'),
+	$author$project$Main$optStr('device_type'),
 	$elm$json$Json$Decode$oneOf(
 		_List_fromArray(
 			[
@@ -5322,18 +5390,6 @@ var $author$project$Main$chargingDecoder = A4(
 				$elm$json$Json$Decode$list($author$project$Main$chargingPointDecoder)),
 				$elm$json$Json$Decode$succeed(_List_Nil)
 			])));
-var $author$project$Main$dp = F3(
-	function (field, decoder, default_) {
-		return A2(
-			$elm$json$Json$Decode$map2,
-			$elm$core$Basics$apR,
-			$elm$json$Json$Decode$oneOf(
-				_List_fromArray(
-					[
-						A2($elm$json$Json$Decode$field, field, decoder),
-						$elm$json$Json$Decode$succeed(default_)
-					])));
-	});
 var $author$project$Main$dpObj = F3(
 	function (field, decoder, default_) {
 		return A2(
@@ -5346,92 +5402,72 @@ var $author$project$Main$dpObj = F3(
 						$elm$json$Json$Decode$succeed(default_)
 					])));
 	});
-var $author$project$Main$emptyAddress = A6($author$project$Main$Address, '', '', '', '', '', '');
-var $author$project$Main$emptyCharging = A3($author$project$Main$Charging, '', '', _List_Nil);
+var $author$project$Main$emptyAccess = A3($author$project$Main$Access, '', _List_Nil, '');
+var $author$project$Main$emptyAddress = A7($author$project$Main$Address, '', '', '', '', '', '', '');
+var $author$project$Main$emptyCharging = A4($author$project$Main$Charging, $elm$core$Maybe$Nothing, '', '', _List_Nil);
 var $author$project$Main$Geo = F2(
 	function (lat, lon) {
-		return {au: lat, av: lon};
+		return {av: lat, aw: lon};
 	});
-var $elm$json$Json$Decode$float = _Json_decodeFloat;
 var $author$project$Main$geoDecoder = A3(
 	$elm$json$Json$Decode$map2,
 	$author$project$Main$Geo,
 	A2($elm$json$Json$Decode$field, 'lat', $elm$json$Json$Decode$float),
 	A2($elm$json$Json$Decode$field, 'lon', $elm$json$Json$Decode$float));
 var $author$project$Main$stationDecoder = A4(
-	$author$project$Main$dp,
-	'opening_daytime',
-	$elm$json$Json$Decode$string,
-	'',
+	$author$project$Main$dpObj,
+	'charging',
+	$author$project$Main$chargingDecoder,
+	$author$project$Main$emptyCharging,
 	A4(
-		$author$project$Main$dp,
-		'opening_weekdays',
-		$elm$json$Json$Decode$string,
-		'',
+		$author$project$Main$dpObj,
+		'access',
+		$author$project$Main$accessDecoder,
+		$author$project$Main$emptyAccess,
 		A4(
 			$author$project$Main$dp,
-			'opening_hours',
+			'location_name',
 			$elm$json$Json$Decode$string,
 			'',
 			A4(
-				$author$project$Main$dp,
-				'payment',
-				$elm$json$Json$Decode$string,
-				'',
+				$author$project$Main$dpObj,
+				'geo',
+				$author$project$Main$geoDecoder,
+				{av: 0, aw: 0},
 				A4(
 					$author$project$Main$dpObj,
-					'charging',
-					$author$project$Main$chargingDecoder,
-					$author$project$Main$emptyCharging,
+					'addr',
+					$author$project$Main$addressDecoder,
+					$author$project$Main$emptyAddress,
 					A4(
 						$author$project$Main$dp,
-						'parking_info',
+						'device_type',
 						$elm$json$Json$Decode$string,
 						'',
 						A4(
 							$author$project$Main$dp,
-							'location_name',
+							'status',
 							$elm$json$Json$Decode$string,
 							'',
 							A4(
-								$author$project$Main$dpObj,
-								'geo',
-								$author$project$Main$geoDecoder,
-								{au: 0, av: 0},
+								$author$project$Main$dp,
+								'display_name',
+								$elm$json$Json$Decode$string,
+								'',
 								A4(
-									$author$project$Main$dpObj,
-									'addr',
-									$author$project$Main$addressDecoder,
-									$author$project$Main$emptyAddress,
+									$author$project$Main$dp,
+									'operator',
+									$elm$json$Json$Decode$string,
+									'',
 									A4(
 										$author$project$Main$dp,
-										'device_type',
+										'id',
 										$elm$json$Json$Decode$string,
 										'',
-										A4(
-											$author$project$Main$dp,
-											'status',
-											$elm$json$Json$Decode$string,
-											'',
-											A4(
-												$author$project$Main$dp,
-												'display_name',
-												$elm$json$Json$Decode$string,
-												'',
-												A4(
-													$author$project$Main$dp,
-													'operator',
-													$elm$json$Json$Decode$string,
-													'',
-													A4(
-														$author$project$Main$dp,
-														'id',
-														$elm$json$Json$Decode$string,
-														'',
-														$elm$json$Json$Decode$succeed($author$project$Main$Station)))))))))))))));
+										$elm$json$Json$Decode$succeed($author$project$Main$Station)))))))))));
 var $author$project$Main$StationsMeta = F2(
 	function (count, lastModified) {
-		return {ai: count, u: lastModified};
+		return {aj: count, v: lastModified};
 	});
 var $elm$json$Json$Decode$int = _Json_decodeInt;
 var $author$project$Main$stationsMetaDecoder = A3(
@@ -5450,14 +5486,14 @@ var $author$project$Main$update = F2(
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{u: meta.u, M: meta.ai, j: $author$project$Main$Loaded}),
+							{v: meta.v, M: meta.aj, i: $author$project$Main$Loaded}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								j: $author$project$Main$Error('Datenformat nicht erkannt')
+								i: $author$project$Main$Error('Datenformat nicht erkannt')
 							}),
 						$elm$core$Platform$Cmd$none);
 				}
@@ -5470,7 +5506,7 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								F: $elm$core$Maybe$Just(station)
+								G: $elm$core$Maybe$Just(station)
 							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
@@ -5480,19 +5516,19 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{F: $elm$core$Maybe$Nothing}),
+						{G: $elm$core$Maybe$Nothing}),
 					$elm$core$Platform$Cmd$none);
 			case 3:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{C: true}),
+						{D: true}),
 					$elm$core$Platform$Cmd$none);
 			case 4:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{C: false}),
+						{D: false}),
 					$elm$core$Platform$Cmd$none);
 			case 5:
 				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
@@ -5506,7 +5542,7 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							j: $author$project$Main$Error(errMsg)
+							i: $author$project$Main$Error(errMsg)
 						}),
 					$elm$core$Platform$Cmd$none);
 		}
@@ -5788,7 +5824,7 @@ var $author$project$About$view = A2(
 				]))
 		]));
 var $author$project$Main$viewAboutOverlay = function (model) {
-	return model.C ? A2(
+	return model.D ? A2(
 		$elm$html$Html$div,
 		_List_fromArray(
 			[
@@ -5906,7 +5942,7 @@ var $elm$html$Html$Attributes$rel = _VirtualDom_attribute('rel');
 var $elm$html$Html$span = _VirtualDom_node('span');
 var $elm$core$Basics$neq = _Utils_notEqual;
 var $author$project$Main$statusText = function (model) {
-	var _v0 = model.j;
+	var _v0 = model.i;
 	switch (_v0.$) {
 		case 0:
 			return 'Lade Daten…';
@@ -5914,7 +5950,7 @@ var $author$project$Main$statusText = function (model) {
 			var msg = _v0.a;
 			return 'Fehler: ' + msg;
 		default:
-			var date = (model.u !== '') ? (' · Stand: ' + model.u) : '';
+			var date = (model.v !== '') ? (' · Stand: ' + model.v) : '';
 			var count = $elm$core$String$fromInt(model.M);
 			return count + (' Ladestationen' + date);
 	}
@@ -5968,7 +6004,7 @@ var $author$project$Main$viewHeader = function (model) {
 							[
 								_Utils_Tuple2(
 								'loading',
-								_Utils_eq(model.j, $author$project$Main$Loading))
+								_Utils_eq(model.i, $author$project$Main$Loading))
 							]))
 					]),
 				_List_fromArray(
@@ -6057,6 +6093,34 @@ var $elm$core$List$filterMap = F2(
 			_List_Nil,
 			xs);
 	});
+var $author$project$Main$formatPayment = function (key) {
+	switch (key) {
+		case 'app':
+			return 'App';
+		case 'rfid':
+			return 'RFID';
+		case 'contactless:credit_cards':
+			return 'Kontaktlos (Kreditkarte)';
+		case 'credit_cards':
+			return 'Kreditkarte';
+		case 'contactless:debit_cards':
+			return 'Kontaktlos (Debitkarte)';
+		case 'debit_cards':
+			return 'Debitkarte';
+		case 'plug_and_charge':
+			return 'Plug & Charge';
+		case 'cash':
+			return 'Bargeld';
+		case 'free':
+			return 'Kostenlos';
+		case 'other':
+			return 'Sonstiges';
+		default:
+			var other = key;
+			return other;
+	}
+};
+var $elm$core$String$fromFloat = _String_fromNumber;
 var $elm$core$List$isEmpty = function (xs) {
 	if (!xs.b) {
 		return true;
@@ -6092,10 +6156,18 @@ var $author$project$Main$tableRow = F2(
 							]))
 					]))) : $elm$core$Maybe$Nothing;
 	});
-var $elm$core$String$toLower = _String_toLower;
 var $elm$html$Html$b = _VirtualDom_node('b');
 var $author$project$Main$viewChargingPoint = F2(
 	function (idx, point) {
+		var kwStr = function () {
+			var _v0 = point.at;
+			if (!_v0.$) {
+				var kw = _v0.a;
+				return $elm$core$String$fromFloat(kw) + ' kW';
+			} else {
+				return '';
+			}
+		}();
 		var rows = _Utils_ap(
 			_List_fromArray(
 				[
@@ -6131,7 +6203,7 @@ var $author$project$Main$viewChargingPoint = F2(
 			_Utils_ap(
 				_List_fromArray(
 					[
-						$elm$core$List$isEmpty(point.Y) ? $elm$core$Maybe$Nothing : $elm$core$Maybe$Just(
+						$elm$core$List$isEmpty(point.X) ? $elm$core$Maybe$Nothing : $elm$core$Maybe$Just(
 						A2(
 							$elm$html$Html$tr,
 							_List_Nil,
@@ -6150,14 +6222,14 @@ var $author$project$Main$viewChargingPoint = F2(
 									_List_fromArray(
 										[
 											$elm$html$Html$text(
-											A2($elm$core$String$join, ', ', point.Y))
+											A2($elm$core$String$join, ', ', point.X))
 										]))
 								])))
 					]),
 				_Utils_ap(
 					_List_fromArray(
 						[
-							$elm$core$List$isEmpty(point._) ? $elm$core$Maybe$Nothing : $elm$core$Maybe$Just(
+							$elm$core$List$isEmpty(point.Z) ? $elm$core$Maybe$Nothing : $elm$core$Maybe$Just(
 							A2(
 								$elm$html$Html$tr,
 								_List_Nil,
@@ -6176,35 +6248,60 @@ var $author$project$Main$viewChargingPoint = F2(
 										_List_fromArray(
 											[
 												$elm$html$Html$text(
-												A2($elm$core$String$join, ', ', point._) + ' kW')
+												A2($elm$core$String$join, ', ', point.Z) + ' kW')
 											]))
 									])))
 						]),
-					_List_fromArray(
-						[
-							$elm$core$List$isEmpty(point.P) ? $elm$core$Maybe$Nothing : $elm$core$Maybe$Just(
-							A2(
-								$elm$html$Html$tr,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$th,
-										_List_Nil,
-										_List_fromArray(
-											[
-												$elm$html$Html$text('EVSE-ID')
-											])),
-										A2(
-										$elm$html$Html$td,
-										_List_Nil,
-										_List_fromArray(
-											[
-												$elm$html$Html$text(
-												A2($elm$core$String$join, ', ', point.P))
-											]))
-									])))
-						]))));
+					_Utils_ap(
+						_List_fromArray(
+							[
+								(kwStr === '') ? $elm$core$Maybe$Nothing : $elm$core$Maybe$Just(
+								A2(
+									$elm$html$Html$tr,
+									_List_Nil,
+									_List_fromArray(
+										[
+											A2(
+											$elm$html$Html$th,
+											_List_Nil,
+											_List_fromArray(
+												[
+													$elm$html$Html$text('kW')
+												])),
+											A2(
+											$elm$html$Html$td,
+											_List_Nil,
+											_List_fromArray(
+												[
+													$elm$html$Html$text(kwStr)
+												]))
+										])))
+							]),
+						_List_fromArray(
+							[
+								$elm$core$List$isEmpty(point.P) ? $elm$core$Maybe$Nothing : $elm$core$Maybe$Just(
+								A2(
+									$elm$html$Html$tr,
+									_List_Nil,
+									_List_fromArray(
+										[
+											A2(
+											$elm$html$Html$th,
+											_List_Nil,
+											_List_fromArray(
+												[
+													$elm$html$Html$text('EVSE-ID')
+												])),
+											A2(
+											$elm$html$Html$td,
+											_List_Nil,
+											_List_fromArray(
+												[
+													$elm$html$Html$text(
+													A2($elm$core$String$join, ', ', point.P))
+												]))
+										])))
+							])))));
 		return A2(
 			$elm$html$Html$table,
 			_List_Nil,
@@ -6230,12 +6327,21 @@ var $author$project$Main$viewChargingPoints = function (points) {
 		A2($elm$core$List$indexedMap, $author$project$Main$viewChargingPoint, points));
 };
 var $author$project$Main$viewStationDetail = function (s) {
+	var typeLabel = function () {
+		var _v3 = s.t;
+		switch (_v3) {
+			case 'rapid':
+				return 'Schnelllader';
+			case 'normal':
+				return 'Normallader';
+			default:
+				var other = _v3;
+				return other;
+		}
+	}();
 	var typeBadge = function () {
-		if (s.K !== '') {
-			var cls = A2(
-				$elm$core$String$contains,
-				'schnell',
-				$elm$core$String$toLower(s.K)) ? 'badge badge-schnell' : 'badge badge-normal';
+		if (s.t !== '') {
+			var cls = (s.t === 'rapid') ? 'badge badge-schnell' : 'badge badge-normal';
 			return _List_fromArray(
 				[
 					A2(
@@ -6246,16 +6352,34 @@ var $author$project$Main$viewStationDetail = function (s) {
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text(s.K)
+							$elm$html$Html$text(typeLabel)
 						]))
 				]);
 		} else {
 			return _List_Nil;
 		}
 	}();
+	var statusLabel = function () {
+		var _v2 = s.i;
+		switch (_v2) {
+			case 'operational':
+				return 'In Betrieb';
+			case 'planned':
+				return 'Geplant';
+			case 'broken':
+				return 'Defekt';
+			case 'disused':
+				return 'Außer Betrieb';
+			case 'construction':
+				return 'Im Bau';
+			default:
+				var other = _v2;
+				return other;
+		}
+	}();
 	var statusBadge = function () {
-		if (s.j !== '') {
-			var cls = (s.j === 'In Betrieb') ? 'badge badge-status-ok' : 'badge badge-status-other';
+		if (s.i !== '') {
+			var cls = (s.i === 'operational') ? 'badge badge-status-ok' : 'badge badge-status-other';
 			return _List_fromArray(
 				[
 					A2(
@@ -6266,7 +6390,7 @@ var $author$project$Main$viewStationDetail = function (s) {
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text(s.j)
+							$elm$html$Html$text(statusLabel)
 						])),
 					$elm$html$Html$text(' ')
 				]);
@@ -6274,7 +6398,20 @@ var $author$project$Main$viewStationDetail = function (s) {
 			return _List_Nil;
 		}
 	}();
-	var paymentSection = (s.X !== '') ? _List_fromArray(
+	var ratedPowerStr = function () {
+		var _v1 = s.s.aI;
+		if (!_v1.$) {
+			var kw = _v1.a;
+			return $elm$core$String$fromFloat(kw) + ' kW';
+		} else {
+			return '';
+		}
+	}();
+	var paymentLabel = $elm$core$List$isEmpty(s.z.W) ? '' : A2(
+		$elm$core$String$join,
+		', ',
+		A2($elm$core$List$map, $author$project$Main$formatPayment, s.z.W));
+	var paymentSection = (paymentLabel !== '') ? _List_fromArray(
 		[
 			A2(
 			$elm$html$Html$div,
@@ -6294,7 +6431,7 @@ var $author$project$Main$viewStationDetail = function (s) {
 				]),
 			_List_fromArray(
 				[
-					$elm$html$Html$text(s.X)
+					$elm$html$Html$text(paymentLabel)
 				]))
 		]) : _List_Nil;
 	var openingSection = function () {
@@ -6303,9 +6440,7 @@ var $author$project$Main$viewStationDetail = function (s) {
 			$elm$core$Basics$identity,
 			_List_fromArray(
 				[
-					A2($author$project$Main$tableRow, 'Verfügbar', s.az),
-					A2($author$project$Main$tableRow, 'Wochentage', s.aA),
-					A2($author$project$Main$tableRow, 'Uhrzeiten', s.ay)
+					A2($author$project$Main$tableRow, 'Öffnungszeiten', s.z.az)
 				]));
 		return $elm$core$List$isEmpty(rows) ? _List_Nil : _List_fromArray(
 			[
@@ -6322,7 +6457,7 @@ var $author$project$Main$viewStationDetail = function (s) {
 				A2($elm$html$Html$table, _List_Nil, rows)
 			]);
 	}();
-	var name = (s.O !== '') ? s.O : ((s.V !== '') ? s.V : 'Ladestation');
+	var name = (s.O !== '') ? s.O : ((s.U !== '') ? s.U : 'Ladestation');
 	var locationSection = A2(
 		$elm$core$List$filterMap,
 		$elm$core$Basics$identity,
@@ -6350,18 +6485,36 @@ var $author$project$Main$viewStationDetail = function (s) {
 						[
 							$elm$html$Html$text(s.L)
 						]))) : $elm$core$Maybe$Nothing,
-				(s.W !== '') ? $elm$core$Maybe$Just(
-				A2(
-					$elm$html$Html$p,
-					_List_fromArray(
-						[
-							A2($elm$html$Html$Attributes$style, 'font-size', '0.85rem'),
-							A2($elm$html$Html$Attributes$style, 'color', '#666')
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text('Parkraum: ' + s.W)
-						]))) : $elm$core$Maybe$Nothing
+				function () {
+				if (s.z.V !== '') {
+					var parkingLabel = function () {
+						var _v0 = s.z.V;
+						switch (_v0) {
+							case 'yes':
+								return 'Öffentlich zugänglich';
+							case 'customers':
+								return 'Nur für Kunden';
+							default:
+								var other = _v0;
+								return other;
+						}
+					}();
+					return $elm$core$Maybe$Just(
+						A2(
+							$elm$html$Html$p,
+							_List_fromArray(
+								[
+									A2($elm$html$Html$Attributes$style, 'font-size', '0.85rem'),
+									A2($elm$html$Html$Attributes$style, 'color', '#666')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Parkraum: ' + parkingLabel)
+								])));
+				} else {
+					return $elm$core$Maybe$Nothing;
+				}
+			}()
 			]));
 	var idSection = (s.R !== '') ? _List_fromArray(
 		[
@@ -6383,13 +6536,14 @@ var $author$project$Main$viewStationDetail = function (s) {
 		$elm$core$Basics$identity,
 		_List_fromArray(
 			[
+				A2($author$project$Main$tableRow, 'Nennleistung', ratedPowerStr),
+				A2($author$project$Main$tableRow, 'In Betrieb seit', s.s.ai),
 				A2(
 				$author$project$Main$tableRow,
-				'Nennleistung',
-				(s.y.T !== '') ? (s.y.T + ' kW') : ''),
-				A2($author$project$Main$tableRow, 'In Betrieb seit', s.y.ar)
+				'Art',
+				(s.s.t !== '') ? s.s.t : '')
 			]));
-	var chargingSection = ($elm$core$List$isEmpty(chargingRows) && $elm$core$List$isEmpty(s.y.Z)) ? _List_Nil : _Utils_ap(
+	var chargingSection = ($elm$core$List$isEmpty(chargingRows) && $elm$core$List$isEmpty(s.s.Y)) ? _List_Nil : _Utils_ap(
 		_List_fromArray(
 			[
 				A2(
@@ -6404,18 +6558,19 @@ var $author$project$Main$viewStationDetail = function (s) {
 					])),
 				A2($elm$html$Html$table, _List_Nil, chargingRows)
 			]),
-		$author$project$Main$viewChargingPoints(s.y.Z));
+		$author$project$Main$viewChargingPoints(s.s.Y));
 	var addressRows = A2(
 		$elm$core$List$filterMap,
 		$elm$core$Basics$identity,
 		_List_fromArray(
 			[
-				A2($author$project$Main$tableRow, 'Straße', s.s.aQ),
-				A2($author$project$Main$tableRow, 'Hausnummer', s.s.an),
-				A2($author$project$Main$tableRow, 'Postleitzahl', s.s.aE),
-				A2($author$project$Main$tableRow, 'Ort', s.s.aB),
-				A2($author$project$Main$tableRow, 'Bundesland', s.s.ag),
-				A2($author$project$Main$tableRow, 'Kreis', s.s.at)
+				A2($author$project$Main$tableRow, 'Straße', s.n.aQ),
+				A2($author$project$Main$tableRow, 'Hausnummer', s.n.as),
+				A2($author$project$Main$tableRow, 'Adresszusatz', s.n.af),
+				A2($author$project$Main$tableRow, 'Postleitzahl', s.n.aD),
+				A2($author$project$Main$tableRow, 'Ort', s.n.ah),
+				A2($author$project$Main$tableRow, 'Bundesland', s.n.aP),
+				A2($author$project$Main$tableRow, 'Kreis', s.n.al)
 			]));
 	var addressSection = $elm$core$List$isEmpty(addressRows) ? _List_Nil : _List_fromArray(
 		[
@@ -6505,7 +6660,7 @@ var $author$project$Main$view = function (model) {
 		_List_fromArray(
 			[
 				$author$project$Main$viewHeader(model),
-				$author$project$Main$viewInfoPanel(model.F),
+				$author$project$Main$viewInfoPanel(model.G),
 				$author$project$Main$viewAboutOverlay(model)
 			]));
 };

@@ -125,7 +125,7 @@
   // --- Markers ----------------------------------------------------------
 
   function makeIcon(station) {
-    var isSchnell = station.device_type && station.device_type.toLowerCase().indexOf("schnell") >= 0;
+    var isSchnell = station.device_type === "rapid";
     var colour = isSchnell ? "#ff8f00" : "#00c853";
     return L.divIcon({
       className: "",
