@@ -52,22 +52,19 @@ type alias Station =
     , addr : Address
     , geo : Geo
     , locationName : String
-    , parkingInfo : String
+    , access : Access
     , charging : Charging
-    , payment : String
-    , openingHours : String
-    , openingWeekdays : String
-    , openingDaytime : String
     }
 
 
 type alias Address =
-    { strasse : String
-    , hausnummer : String
-    , plz : String
-    , ort : String
-    , bundesland : String
-    , kreis : String
+    { street : String
+    , houseNumber : String
+    , addressExtra : String
+    , postcode : String
+    , city : String
+    , state : String
+    , district : String
     }
 
 
@@ -77,9 +74,17 @@ type alias Geo =
     }
 
 
+type alias Access =
+    { parking : String
+    , payment : List String
+    , openingHours : String
+    }
+
+
 type alias Charging =
-    { inbetriebnahme : String
-    , nennleistung : String
+    { ratedPowerKw : Maybe Float
+    , commissioningDate : String
+    , deviceType : String
     , points : List ChargingPoint
     }
 
@@ -87,6 +92,7 @@ type alias Charging =
 type alias ChargingPoint =
     { plugs : List String
     , power : List String
+    , kW : Maybe Float
     , evseId : List String
     , pkey : String
     }
@@ -245,12 +251,8 @@ stationDecoder =
         |> dpObj "addr" addressDecoder emptyAddress
         |> dpObj "geo" geoDecoder { lat = 0, lon = 0 }
         |> dp "location_name" D.string ""
-        |> dp "parking_info" D.string ""
+        |> dpObj "access" accessDecoder emptyAccess
         |> dpObj "charging" chargingDecoder emptyCharging
-        |> dp "payment" D.string ""
-        |> dp "opening_hours" D.string ""
-        |> dp "opening_weekdays" D.string ""
-        |> dp "opening_daytime" D.string ""
 
 
 dp : String -> D.Decoder a -> a -> D.Decoder (a -> b) -> D.Decoder b
@@ -267,18 +269,19 @@ dpObj field decoder default_ =
 
 addressDecoder : D.Decoder Address
 addressDecoder =
-    D.map6 Address
-        (optStr "Straße")
-        (optStr "Hausnummer")
-        (optStr "Postleitzahl")
-        (optStr "Ort")
-        (optStr "Bundesland")
-        (optStr "Kreis/kreisfreie Stadt")
+    D.succeed Address
+        |> dp "street" D.string ""
+        |> dp "house_number" D.string ""
+        |> dp "address_extra" D.string ""
+        |> dp "postcode" D.string ""
+        |> dp "city" D.string ""
+        |> dp "state" D.string ""
+        |> dp "district" D.string ""
 
 
 emptyAddress : Address
 emptyAddress =
-    Address "" "" "" "" "" ""
+    Address "" "" "" "" "" "" ""
 
 
 geoDecoder : D.Decoder Geo
@@ -288,11 +291,25 @@ geoDecoder =
         (D.field "lon" D.float)
 
 
+accessDecoder : D.Decoder Access
+accessDecoder =
+    D.map3 Access
+        (optStr "parking")
+        (D.oneOf [ D.field "payment" (D.list D.string), D.succeed [] ])
+        (optStr "opening_hours")
+
+
+emptyAccess : Access
+emptyAccess =
+    Access "" [] ""
+
+
 chargingDecoder : D.Decoder Charging
 chargingDecoder =
-    D.map3 Charging
-        (optStr "Inbetriebnahmedatum")
-        (optStr "Nennleistung Ladeeinrichtung [kW]")
+    D.map4 Charging
+        (D.oneOf [ D.field "rated_power_kw" (D.map Just D.float), D.succeed Nothing ])
+        (optStr "commissioning_date")
+        (optStr "device_type")
         (D.oneOf
             [ D.field "points" (D.list chargingPointDecoder)
             , D.succeed []
@@ -302,14 +319,15 @@ chargingDecoder =
 
 emptyCharging : Charging
 emptyCharging =
-    Charging "" "" []
+    Charging Nothing "" "" []
 
 
 chargingPointDecoder : D.Decoder ChargingPoint
 chargingPointDecoder =
-    D.map4 ChargingPoint
+    D.map5 ChargingPoint
         (D.oneOf [ D.field "plugs" (D.list D.string), D.succeed [] ])
         (D.oneOf [ D.field "power" (D.list D.string), D.succeed [] ])
+        (D.oneOf [ D.field "kW" (D.map Just D.float), D.succeed Nothing ])
         (D.oneOf [ D.field "evse_id" (D.list D.string), D.succeed [] ])
         (optStr "pkey")
 
@@ -465,44 +483,60 @@ viewStationDetail s =
             else
                 "Ladestation"
 
+        statusLabel =
+            case s.status of
+                "operational" -> "In Betrieb"
+                "planned" -> "Geplant"
+                "broken" -> "Defekt"
+                "disused" -> "Außer Betrieb"
+                "construction" -> "Im Bau"
+                other -> other
+
         statusBadge =
             if s.status /= "" then
                 let
                     cls =
-                        if s.status == "In Betrieb" then
+                        if s.status == "operational" then
                             "badge badge-status-ok"
 
                         else
                             "badge badge-status-other"
                 in
-                [ span [ class cls ] [ text s.status ], text " " ]
+                [ span [ class cls ] [ text statusLabel ], text " " ]
 
             else
                 []
+
+        typeLabel =
+            case s.deviceType of
+                "rapid" -> "Schnelllader"
+                "normal" -> "Normallader"
+                other -> other
 
         typeBadge =
             if s.deviceType /= "" then
                 let
                     cls =
-                        if String.contains "schnell" (String.toLower s.deviceType) then
+                        if s.deviceType == "rapid" then
                             "badge badge-schnell"
 
                         else
                             "badge badge-normal"
                 in
-                [ span [ class cls ] [ text s.deviceType ] ]
+                [ span [ class cls ] [ text typeLabel ] ]
 
             else
                 []
 
         addressRows =
             List.filterMap identity
-                [ tableRow "Straße" s.addr.strasse
-                , tableRow "Hausnummer" s.addr.hausnummer
-                , tableRow "Postleitzahl" s.addr.plz
-                , tableRow "Ort" s.addr.ort
-                , tableRow "Bundesland" s.addr.bundesland
-                , tableRow "Kreis" s.addr.kreis
+                [ tableRow "Straße" s.addr.street
+                , tableRow "Hausnummer" s.addr.houseNumber
+                , tableRow "Adresszusatz" s.addr.addressExtra
+                , tableRow "Postleitzahl" s.addr.postcode
+                , tableRow "Ort" s.addr.city
+                , tableRow "Bundesland" s.addr.state
+                , tableRow "Kreis" s.addr.district
                 ]
 
         addressSection =
@@ -526,17 +560,33 @@ viewStationDetail s =
 
                   else
                     Nothing
-                , if s.parkingInfo /= "" then
-                    Just (p [ style "font-size" "0.85rem", style "color" "#666" ] [ text ("Parkraum: " ++ s.parkingInfo) ])
+                , if s.access.parking /= "" then
+                    let
+                        parkingLabel =
+                            case s.access.parking of
+                                "yes" -> "Öffentlich zugänglich"
+                                "customers" -> "Nur für Kunden"
+                                other -> other
+                    in
+                    Just (p [ style "font-size" "0.85rem", style "color" "#666" ] [ text ("Parkraum: " ++ parkingLabel) ])
 
                   else
                     Nothing
                 ]
 
+        ratedPowerStr =
+            case s.charging.ratedPowerKw of
+                Just kw ->
+                    String.fromFloat kw ++ " kW"
+
+                Nothing ->
+                    ""
+
         chargingRows =
             List.filterMap identity
-                [ tableRow "Nennleistung" (if s.charging.nennleistung /= "" then s.charging.nennleistung ++ " kW" else "")
-                , tableRow "In Betrieb seit" s.charging.inbetriebnahme
+                [ tableRow "Nennleistung" ratedPowerStr
+                , tableRow "In Betrieb seit" s.charging.commissioningDate
+                , tableRow "Art" (if s.charging.deviceType /= "" then s.charging.deviceType else "")
                 ]
 
         chargingSection =
@@ -549,10 +599,16 @@ viewStationDetail s =
                 ]
                     ++ viewChargingPoints s.charging.points
 
+        paymentLabel =
+            if List.isEmpty s.access.payment then
+                ""
+            else
+                String.join ", " (List.map formatPayment s.access.payment)
+
         paymentSection =
-            if s.payment /= "" then
+            if paymentLabel /= "" then
                 [ div [ class "section-title" ] [ text "Bezahlung" ]
-                , p [ style "font-size" "0.85rem" ] [ text s.payment ]
+                , p [ style "font-size" "0.85rem" ] [ text paymentLabel ]
                 ]
 
             else
@@ -562,9 +618,7 @@ viewStationDetail s =
             let
                 rows =
                     List.filterMap identity
-                        [ tableRow "Verfügbar" s.openingHours
-                        , tableRow "Wochentage" s.openingWeekdays
-                        , tableRow "Uhrzeiten" s.openingDaytime
+                        [ tableRow "Öffnungszeiten" s.access.openingHours
                         ]
             in
             if List.isEmpty rows then
@@ -595,6 +649,22 @@ viewStationDetail s =
         ++ idSection
 
 
+formatPayment : String -> String
+formatPayment key =
+    case key of
+        "app" -> "App"
+        "rfid" -> "RFID"
+        "contactless:credit_cards" -> "Kontaktlos (Kreditkarte)"
+        "credit_cards" -> "Kreditkarte"
+        "contactless:debit_cards" -> "Kontaktlos (Debitkarte)"
+        "debit_cards" -> "Debitkarte"
+        "plug_and_charge" -> "Plug & Charge"
+        "cash" -> "Bargeld"
+        "free" -> "Kostenlos"
+        "other" -> "Sonstiges"
+        other -> other
+
+
 viewChargingPoints : List ChargingPoint -> List (Html Msg)
 viewChargingPoints points =
     if List.isEmpty points then
@@ -610,6 +680,14 @@ viewChargingPoints points =
 viewChargingPoint : Int -> ChargingPoint -> Html Msg
 viewChargingPoint idx point =
     let
+        kwStr =
+            case point.kW of
+                Just kw ->
+                    String.fromFloat kw ++ " kW"
+
+                Nothing ->
+                    ""
+
         rows =
             [ Just (tr [] [ th [] [ text "Ladepunkt" ], td [] [ b [] [ text (String.fromInt (idx + 1)) ] ] ]) ]
                 ++ [ if List.isEmpty point.plugs then
@@ -623,6 +701,12 @@ viewChargingPoint idx point =
 
                      else
                         Just (tr [] [ th [] [ text "Leistung" ], td [] [ text (String.join ", " point.power ++ " kW") ] ])
+                   ]
+                ++ [ if kwStr == "" then
+                        Nothing
+
+                     else
+                        Just (tr [] [ th [] [ text "kW" ], td [] [ text kwStr ] ])
                    ]
                 ++ [ if List.isEmpty point.evseId then
                         Nothing

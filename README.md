@@ -48,6 +48,9 @@ und das Laden/Entpacken der Daten (pako) laufen über Elm Ports in JavaScript.
 ## Struktur
 
 ```
+api/
+  ladesaeule/
+    openapi.yaml    – OpenAPI-Spezifikation der ladesaeule-Datenquelle
 elm/
   elm.json          – Elm-Abhängigkeiten
   src/Main.elm      – Elm-Applikation (UI, State, JSON-Decoder)
